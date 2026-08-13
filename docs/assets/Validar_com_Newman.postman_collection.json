@@ -1,0 +1,316 @@
+{
+  "info": {
+    "_postman_id": "392a6685-3e6a-494c-97db-8abbc343ec1d",
+    "name": "Validar com Newman",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56792740",
+    "_collection_link": "https://go.postman.co/collection/56792740-392a6685-3e6a-494c-97db-8abbc343ec1d?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Validar Cadastro de Produtos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1 - Status code\r",
+              "pm.test(\"Status code é 201 Created\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "const jsonData = pm.response.json();\r",
+              "\r",
+              "// 2 - Estrutura da resposta\r",
+              "pm.test(\"Estrutura: resposta possui 'data' (objeto) e 'mensagens' (array)\", function () {\r",
+              "    pm.expect(jsonData).to.have.property(\"data\");\r",
+              "    pm.expect(jsonData.data).to.be.an(\"object\");\r",
+              "    pm.expect(jsonData).to.have.property(\"mensagens\");\r",
+              "    pm.expect(jsonData.mensagens).to.be.an(\"array\").that.is.not.empty;\r",
+              "});\r",
+              "\r",
+              "// 3 - Campos obrigatórios\r",
+              "pm.test(\"Campos obrigatórios estão presentes em 'data'\", function () {\r",
+              "    const requiredFields = [\r",
+              "        \"id\", \"category_id\", \"supplier_id\", \"name\", \"slug\",\r",
+              "        \"price\", \"stock_quantity\", \"sku\", \"is_active\",\r",
+              "        \"created_at\", \"updated_at\"\r",
+              "    ];\r",
+              "    requiredFields.forEach(function (field) {\r",
+              "        pm.expect(jsonData.data, \"campo: \" + field).to.have.property(field);\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "// 4 - Tipos de dados\r",
+              "pm.test(\"Tipos de dados dos campos estão corretos\", function () {\r",
+              "    pm.expect(jsonData.data.id).to.be.a(\"number\");\r",
+              "    pm.expect(jsonData.data.category_id).to.be.a(\"number\");\r",
+              "    pm.expect(jsonData.data.supplier_id).to.be.a(\"number\");\r",
+              "    pm.expect(jsonData.data.name).to.be.a(\"string\");\r",
+              "    pm.expect(jsonData.data.slug).to.be.a(\"string\");\r",
+              "    pm.expect(jsonData.data.price).to.be.a(\"number\");\r",
+              "    pm.expect(jsonData.data.stock_quantity).to.be.a(\"number\");\r",
+              "    pm.expect(jsonData.data.sku).to.be.a(\"string\");\r",
+              "    pm.expect(jsonData.data.is_active).to.be.a(\"boolean\");\r",
+              "    pm.expect(jsonData.data.created_at).to.be.a(\"string\");\r",
+              "    pm.expect(jsonData.data.updated_at).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "// 5 - Valores esperados\r",
+              "pm.test(\"Valores retornados correspondem ao payload enviado\", function () {\r",
+              "    pm.expect(jsonData.data.name).to.eql(\"Mossese Gamer RGB\");\r",
+              "    pm.expect(jsonData.data.price).to.eql(299.9);\r",
+              "    pm.expect(jsonData.data.stock_quantity).to.eql(50);\r",
+              "    pm.expect(jsonData.data.sku).to.eql(\"MGpgP-2024\");\r",
+              "    pm.expect(jsonData.data.category_id).to.eql(10);\r",
+              "    pm.expect(jsonData.data.supplier_id).to.eql(10);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Valores gerados pelo servidor estão corretos\", function () {\r",
+              "    pm.expect(jsonData.data.slug).to.eql(\"mossese-gamer-rgb\");\r",
+              "    pm.expect(jsonData.data.is_active).to.be.true;\r",
+              "});\r",
+              "\r",
+              "// Salva o id do produto criado para encadeamento em outras requisições\r",
+              "if (jsonData.data && jsonData.data.id) {\r",
+              "    pm.environment.set(\"produtoId\", jsonData.data.id);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{    \r\n  \"name\": \"{{$randomLastName}}\",\r\n  \"price\": 50,\r\n  \"stock_quantity\": 10,\r\n  \"sku\": \"{{$randomAlphaNumeric}}\",\r\n  \"category_id\": 10,\r\n  \"supplier_id\": 10\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/products",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Validar Cadastro de Fornecedores",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1 - Status code\r",
+              "pm.test(\"Status code é 201 Created\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 10ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(400);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "//define cnpj onde tem a data atual convertida e mantendo os 14 digitos. Vaiser salva como cnpj_unico\r",
+              "\r",
+              "const cnpj = Date.now().toString().padStart(14, '0').slice(-14);\r",
+              "pm.variables.set(\"cnpj_unico\", cnpj);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "//cnpj_unico virá do pre-request\n{\n  \"company_name\": \"{{$randomCompanyName}}\",\n  \"contact_name\": \"{{$randomFullName}}\",\n  \"email\": \"{{$randomEmail}}\",\n  \"phone\": \"(11) 98765-4321\",\n  \"cnpj\": \"{{cnpj_unico}}\",\n  \"uf\": \"SP\"\n}"
+        },
+        "url": {
+          "raw": "{{baseURL}}/suppliers",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "suppliers"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Validar Cadastro de categoria",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let json;",
+              "try { json = pm.response.json(); } catch (e) { json = {}; }",
+              "const data = json.data || {};",
+              "const mensagens = json.mensagens || [];",
+              "",
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Response is valid JSON with data and mensagens\", function () {",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+              "    pm.expect(json).to.have.property(\"data\");",
+              "    pm.expect(json).to.have.property(\"mensagens\");",
+              "    pm.expect(mensagens).to.be.an(\"array\");",
+              "});",
+              "",
+              "pm.test(\"name is present and not empty\", function () {",
+              "    pm.expect(data).to.have.property(\"name\");",
+              "    pm.expect(data.name).to.be.a(\"string\");",
+              "    pm.expect(data.name.trim()).to.not.equal(\"\");",
+              "});",
+              "",
+              "pm.test(\"description is present and not empty\", function () {",
+              "    pm.expect(data).to.have.property(\"description\");",
+              "    pm.expect(data.description).to.be.a(\"string\");",
+              "    pm.expect(data.description.trim()).to.not.equal(\"\");",
+              "});",
+              "",
+              "pm.test(\"Message 'Categoria criada com sucesso!' is present\", function () {",
+              "    const found = mensagens.some(function (m) {",
+              "        return typeof m === \"string\" && m.toLowerCase().indexOf(\"categoria criada com sucesso\") !== -1;",
+              "    });",
+              "    pm.expect(found, \"Expected success message in mensagens\").to.be.true;",
+              "});",
+              "",
+              "pm.test(\"is_active is true\", function () {",
+              "    pm.expect(data.is_active).to.eql(true);",
+              "});",
+              "",
+              "pm.test(\"id is present and is a number\", function () {",
+              "    pm.expect(data).to.have.property(\"id\");",
+              "    pm.expect(data.id).to.be.a(\"number\");",
+              "});",
+              "",
+              "pm.test(\"slug matches slugified name (lowercase)\", function () {",
+              "    pm.expect(data).to.have.property(\"slug\");",
+              "    pm.expect(data.slug).to.be.a(\"string\");",
+              "    pm.expect(data.slug).to.eql(data.slug.toLowerCase());",
+              "    if (data.name) {",
+              "        pm.expect(data.slug).to.include(data.name.toLowerCase().split(\" \")[0].replace(/[^a-z0-9]/g, \"\"));",
+              "    }",
+              "});",
+              "",
+              "pm.test(\"created_at is a valid ISO date\", function () {",
+              "    pm.expect(data).to.have.property(\"created_at\");",
+              "    pm.expect(data.created_at).to.be.a(\"string\");",
+              "    const d = new Date(data.created_at);",
+              "    pm.expect(isNaN(d.getTime()), \"created_at should be a valid date\").to.be.false;",
+              "});",
+              "",
+              "pm.test(\"display_order is a number\", function () {",
+              "    pm.expect(data).to.have.property(\"display_order\");",
+              "    pm.expect(data.display_order).to.be.a(\"number\");",
+              "});",
+              "",
+              "pm.test(\"Response time is below 2000ms\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    //variáveis dinamicas conhecidas como fake que geram valores aleatórios.\n  \"name\": \"{{$randomJobArea}}-{{$randomInt}}\",\n  \"description\": \"{{$randomLoremSentence}}\"\n}",
+          "options": {
+            "raw": {
+              "headerFamily": "json",
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/categories",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "categories"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

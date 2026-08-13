@@ -8,7 +8,7 @@ Este repositório reúne as collections, environments e massa de dados utilizado
 
 A jornada passou por fundamentos de HTTP, leitura de contratos Swagger, criação de testes automatizados, execução em escala com dados externos e publicação de relatórios em HTML — tudo que um QA Engineer precisa no dia a dia.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](www.linkedin.com/in/jefferson-alexander-gomes-ba7924198)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/jefferson-alexander-gomes-ba7924198)
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/jefferson-alexander)
 
 
